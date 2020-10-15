@@ -34,6 +34,8 @@ def main():
                    error_threshold=0.1)
     bpnn.fit(samples, target, debug=True)
 
+    print(bpnn.predict(samples))
+
 
 if __name__ == '__main__':
     main()

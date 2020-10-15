@@ -138,4 +138,22 @@ class Network:
         :param x: 样本序列
         :return: 预测的值序列
         """
-        pass
+        y = []
+        for sample in x:
+            o = np.zeros(shape=len(self.w))
+            for index, value in enumerate(sample):
+                o[self.id_of_input_nodes[index]] = value
+
+            cur_layer = self.id_of_input_nodes
+            while len(cur_layer) != 0:
+                cur_layer = get_next_layer(cur_layer, self.w)
+                for node in cur_layer:
+                    s = 0
+                    # 取列（父节点）
+                    for p_index, parent in enumerate(self.w[:, node]):
+                        if parent != 0 and o[p_index] != 0:
+                            s += parent * o[p_index]
+                    s += self.theta[node]
+                    o[node] = sigmoid(s)
+            y.append([o[output_node] for output_node in self.id_of_output_nodes])
+        return y
