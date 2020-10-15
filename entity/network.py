@@ -63,7 +63,7 @@ class Network:
         :return: None
         """
         o = np.zeros(shape=len(self.w))
-        for sample in x:
+        for sample_index, sample in enumerate(x):
             num_iter = 0
             while num_iter < self.max_iter:
                 num_iter += 1
@@ -96,7 +96,7 @@ class Network:
 
                 # 计算输出层误差
                 error = np.zeros(shape=len(self.w))
-                for index, value in enumerate(y):
+                for index, value in enumerate(y[sample_index]):
                     error[self.id_of_output_nodes[index]] = value - o[self.id_of_output_nodes[index]]
                 if debug:
                     print(f"输出层误差{list(error)}")
