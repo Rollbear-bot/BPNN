@@ -27,6 +27,13 @@ def main():
 
     samples = [(1, 0, 1)]
     target = [[1]]
+    # samples = [
+    #     (1, 1, 1),
+    #     (1, 1, 0),
+    #     (0, 0, 1),
+    #     (0, 1, 0)
+    # ]
+    # target = [[1], [1], [0], [0]]
 
     # 使用连接权重和偏置初始化bp网络
     bpnn = Network(w=w, theta=theta, learning_rate=0.9, max_iter=9,
