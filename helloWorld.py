@@ -27,6 +27,7 @@ def main():
 
     samples = [(1, 0, 1)]
     target = [[1]]
+
     # samples = [
     #     (1, 1, 1),
     #     (1, 1, 0),

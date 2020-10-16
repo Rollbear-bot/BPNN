@@ -65,13 +65,13 @@ class Network:
         o = np.zeros(shape=len(self.w))
         for sample_index, sample in enumerate(x):
             if debug:
-                print("-------------------------------")
+                print("=====================================")
             num_iter = 0
             while num_iter < self.max_iter:
                 num_iter += 1
                 if debug:
                     print(f"样本{sample}，迭代次数{num_iter}")
-                    print("向前传播")
+                    print("--------向前传播--------")
 
                 # 样本传入到输入层
                 cur_layer = self.id_of_input_nodes
@@ -102,7 +102,7 @@ class Network:
                 for index, value in enumerate(y[sample_index]):
                     error[self.id_of_output_nodes[index]] = value - o[self.id_of_output_nodes[index]]
                 if debug:
-                    print(f"输出层误差{list(error)}")
+                    print(f"输出层误差{[item for item in error if item != 0]}")
 
                 # 网络总误差
                 total_error = sum([(item**2)/2 for item in error if item != 0])
@@ -111,7 +111,7 @@ class Network:
 
                 # 误差反向传播
                 if debug:
-                    print("误差反向传播")
+                    print("--------误差反向传播--------")
                 cur_layer = self.id_of_output_nodes
                 while set(cur_layer) != set(self.id_of_input_nodes):
                     cur_layer = get_parent_layer(cur_layer, self.w)
@@ -127,7 +127,7 @@ class Network:
 
                 # 权重与偏置调整
                 if debug:
-                    print("权重与偏置调整")
+                    print("--------权重与偏置调整--------")
                 for i in range(1, len(self.w)):
                     for j in range(1, len(self.w)):
                         if self.w[i, j] != 0:
