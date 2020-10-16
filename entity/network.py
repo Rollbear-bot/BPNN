@@ -64,11 +64,12 @@ class Network:
         """
         o = np.zeros(shape=len(self.w))
         for sample_index, sample in enumerate(x):
+            if debug:
+                print("-------------------------------")
             num_iter = 0
             while num_iter < self.max_iter:
                 num_iter += 1
                 if debug:
-                    print("-------------------------------")
                     print(f"样本{sample}，迭代次数{num_iter}")
                     print("向前传播")
 
@@ -77,7 +78,7 @@ class Network:
 
                 for index, value in enumerate(sample):
                     if debug:
-                        print(f"O{self.id_of_input_nodes[index]}:={value}")
+                        print(f"O[{self.id_of_input_nodes[index]}] = {value}")
                     o[self.id_of_input_nodes[index]] = value
 
                 while len(cur_layer) != 0:
@@ -93,6 +94,8 @@ class Network:
                                 s += parent * o[p_index]
                         s += self.theta[node]
                         o[node] = sigmoid(s)
+                        if debug:
+                            print(f"O[{node}] = {sigmoid(s)}")
 
                 # 计算输出层误差
                 error = np.zeros(shape=len(self.w))
@@ -107,6 +110,8 @@ class Network:
                     print(f"网络总误差{total_error}")
 
                 # 误差反向传播
+                if debug:
+                    print("误差反向传播")
                 cur_layer = self.id_of_output_nodes
                 while set(cur_layer) != set(self.id_of_input_nodes):
                     cur_layer = get_parent_layer(cur_layer, self.w)
@@ -117,20 +122,31 @@ class Network:
                                 s += desc * error[d_index]
                         # 计算每个节点的误差
                         error[node] = o[node] * (1 - o[node]) * s
+                        if debug:
+                            print(f"节点{node}误差：{o[node] * (1 - o[node]) * s}")
 
                 # 权重与偏置调整
+                if debug:
+                    print("权重与偏置调整")
                 for i in range(1, len(self.w)):
                     for j in range(1, len(self.w)):
                         if self.w[i, j] != 0:
+                            if debug:
+                                print(f"w[{i}, {j}] = {self.w[i, j]} + {o[i] * error[j] * self.learning_rate}")
                             self.w[i, j] += o[i] * error[j] * self.learning_rate
                 for j in range(1, len(self.w)):
                     if self.theta[j] != 0:
+                        if debug:
+                            print(f"θ[{j}] = {self.theta[j]} + {self.learning_rate * error[j]}")
                         self.theta[j] += self.learning_rate * error[j]
 
                 if total_error < self.error_threshold:
                     if debug:
-                        print(f"网络总误差{total_error}小于阈值{self.error_threshold}，选择下一个样本")
+                        print(f"网络总误差{total_error}小于阈值{self.error_threshold}，结束样本{sample}的迭代\n")
                     break  # 跳出循环，选择下一个样本
+
+                if debug:
+                    print("\n")
 
     def predict(self, x):
         """
