@@ -123,7 +123,7 @@ class Network:
                         # 计算每个节点的误差
                         error[node] = o[node] * (1 - o[node]) * s
                         if debug:
-                            print(f"节点{node}误差：{o[node] * (1 - o[node]) * s}")
+                            print(f"节点{node}误差 = {o[node]} * {1 - o[node]} * {s} = {o[node] * (1 - o[node]) * s}")
 
                 # 权重与偏置调整
                 if debug:
@@ -132,12 +132,14 @@ class Network:
                     for j in range(1, len(self.w)):
                         if self.w[i, j] != 0:
                             if debug:
-                                print(f"w[{i}, {j}] = {self.w[i, j]} + {o[i] * error[j] * self.learning_rate}")
+                                print(f"w[{i}, {j}] = {self.w[i, j]} + {o[i] * error[j] * self.learning_rate} = "
+                                      f"{self.w[i, j] + o[i] * error[j] * self.learning_rate}")
                             self.w[i, j] += o[i] * error[j] * self.learning_rate
                 for j in range(1, len(self.w)):
                     if self.theta[j] != 0:
                         if debug:
-                            print(f"θ[{j}] = {self.theta[j]} + {self.learning_rate * error[j]}")
+                            print(f"θ[{j}] = {self.theta[j]} + {self.learning_rate * error[j]} "
+                                  f"= {self.theta[j] +self.learning_rate * error[j]}")
                         self.theta[j] += self.learning_rate * error[j]
 
                 if total_error < self.error_threshold:
